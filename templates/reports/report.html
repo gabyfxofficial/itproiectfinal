@@ -1,0 +1,31 @@
+{% extends "layouts/base.html" %} {% block title %}Reports{% endblock %} {%
+block content %}
+<h2 class="mb-3">Company Report</h2>
+
+<a href="{{ url_for('reports.download_report') }}" class="btn btn-success mb-3">
+  ⬇️ Download PDF
+</a>
+
+<table class="table table-striped table-bordered shadow-sm">
+  <thead class="table-dark">
+    <tr>
+      <th>Company</th>
+      <th>User Count</th>
+      <th>Average Age</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for row in data %}
+    <tr>
+      <td>{{ row.company }}</td>
+      <td>{{ row.user_count }}</td>
+      <td>{{ row.avg_age | round(1) }}</td>
+    </tr>
+    {% else %}
+    <tr>
+      <td colspan="3" class="text-center text-muted">No data available</td>
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>
+{% endblock %}

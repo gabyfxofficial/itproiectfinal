@@ -1,0 +1,15 @@
+{% extends "layouts/base.html" %} {% block title %}Welcome{% endblock %} {%
+block content %}
+<div class="text-center mt-5">
+  <h1 class="mb-4">Welcome to Users Management App</h1>
+  <p class="lead">
+    Manage users, filter, sort, and generate reports with ease.
+  </p>
+  <a
+    href="{{ url_for('users.list_users') }}"
+    class="btn btn-lg btn-primary mt-3"
+  >
+    Go to /users
+  </a>
+</div>
+{% endblock %}

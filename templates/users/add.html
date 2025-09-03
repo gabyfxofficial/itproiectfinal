@@ -1,0 +1,12 @@
+{% extends "layouts/base.html" %} {% block title %}Add User{% endblock %} {%
+block content %}
+<h2>Add User</h2>
+<form method="post">
+  <input class="form-control mb-2" name="firstName" placeholder="First Name" />
+  <input class="form-control mb-2" name="lastName" placeholder="Last Name" />
+  <input class="form-control mb-2" name="age" type="number" placeholder="Age" />
+  <input class="form-control mb-2" name="email" placeholder="Email" />
+  <input class="form-control mb-2" name="company" placeholder="Company" />
+  <button class="btn btn-success">Save</button>
+</form>
+{% endblock %}

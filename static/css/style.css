@@ -1,0 +1,129 @@
+/* ================= GLOBAL ================= */
+body {
+  background-color: #f0f4f8;
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+h2 {
+  margin-bottom: 20px;
+}
+
+/* ================= NAVBAR ================= */
+.navbar-nav {
+  flex-direction: row;
+}
+
+.navbar-nav .nav-item {
+  display: flex;
+  align-items: center;
+}
+
+.navbar-brand,
+.nav-link {
+  font-size: 1.1rem;
+}
+
+.navbar-brand {
+  font-size: 1.3rem;
+  font-weight: bold;
+}
+
+/* ================= BUTTONS ================= */
+.btn {
+  margin-right: 5px;
+  transition: transform 0.2s ease-in-out;
+}
+
+.btn:hover {
+  transform: scale(1.05);
+}
+
+/* ================= TABLES ================= */
+.table {
+  background: #fff;
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+/* Center table content */
+.table th,
+.table td {
+  text-align: center;
+  vertical-align: middle;
+}
+
+.table th {
+  background: #343a40;
+  color: #fff;
+}
+
+/* ================= FORMS ================= */
+form input {
+  border-radius: 6px;
+}
+
+/* ================= FOOTER ================= */
+footer.footer {
+  margin-top: auto;
+  padding: 15px;
+  text-align: center;
+  background: #2c3e50;
+  color: #ecf0f1;
+}
+
+footer.footer a {
+  color: #bdc3c7;
+  margin: 0 10px;
+  text-decoration: none;
+  transition: color 0.2s ease-in-out;
+}
+
+footer.footer a:hover {
+  color: #ffffff;
+}
+
+/* ================= DELETE MODAL ================= */
+.delete-warning-icon {
+  font-size: 3rem;
+  color: #e74c3c;
+  animation: pulse 1.2s infinite;
+}
+
+@keyframes pulse {
+  0% {
+    transform: scale(1);
+    opacity: 1;
+  }
+  50% {
+    transform: scale(1.2);
+    opacity: 0.7;
+  }
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+#deleteMessage {
+  color: #c0392b;
+}
+
+/* ================= BADGES (pentru details.html) ================= */
+.badge-age {
+  background-color: #3498db;
+  color: #fff;
+  font-size: 0.9rem;
+  padding: 6px 10px;
+  border-radius: 12px;
+}
+
+.badge-company {
+  background-color: #27ae60;
+  color: #fff;
+  font-size: 0.9rem;
+  padding: 6px 10px;
+  border-radius: 12px;
+}

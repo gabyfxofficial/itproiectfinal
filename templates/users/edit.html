@@ -1,0 +1,21 @@
+{% extends "layouts/base.html" %} {% block title %}Edit User{% endblock %} {%
+block content %}
+<h2>Edit User</h2>
+<form method="post">
+  <input
+    class="form-control mb-2"
+    name="firstName"
+    value="{{user.firstName}}"
+  />
+  <input class="form-control mb-2" name="lastName" value="{{user.lastName}}" />
+  <input
+    class="form-control mb-2"
+    name="age"
+    type="number"
+    value="{{user.age}}"
+  />
+  <input class="form-control mb-2" name="email" value="{{user.email}}" />
+  <input class="form-control mb-2" name="company" value="{{user.company}}" />
+  <button class="btn btn-warning">Update</button>
+</form>
+{% endblock %}

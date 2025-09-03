@@ -1,0 +1,129 @@
+{% extends "layouts/base.html" %} {% block title %}Users{% endblock %} {% block
+content %}
+<h2 class="mb-3">Users</h2>
+
+<div class="d-flex flex-wrap gap-2 mb-3">
+  <a class="btn btn-primary" href="{{ url_for('users.add_user') }}"
+    >➕ Add User</a
+  >
+  <a
+    class="btn btn-outline-secondary"
+    href="{{ url_for('users.list_users', sort='name') }}"
+    >Sort by Name</a
+  >
+  <a
+    class="btn btn-outline-secondary"
+    href="{{ url_for('users.list_users', sort='age') }}"
+    >Sort by Age</a
+  >
+</div>
+
+<form class="row g-2 mb-3" method="get">
+  <div class="col-auto">
+    <input
+      type="text"
+      class="form-control"
+      name="company"
+      placeholder="Filter by company"
+    />
+  </div>
+  <div class="col-auto">
+    <button class="btn btn-info">Filter</button>
+  </div>
+</form>
+
+<table
+  class="table table-hover table-bordered align-middle shadow-sm text-center"
+>
+  <thead class="table-dark">
+    <tr>
+      <th scope="col">ID</th>
+      <th scope="col">Name</th>
+      <th scope="col">Age</th>
+      <th scope="col">Email</th>
+      <th scope="col">Company</th>
+      <th scope="col" style="width: 180px">Actions</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for u in users %}
+    <tr>
+      <td>{{ u.id }}</td>
+      <td>
+        <a
+          href="{{ url_for('users.user_details', user_id=u.id) }}"
+          class="text-decoration-none"
+        >
+          {{ u.firstName }} {{ u.lastName }}
+        </a>
+      </td>
+      <td>{{ u.age }}</td>
+      <td>{{ u.email }}</td>
+      <td>{{ u.company }}</td>
+      <td>
+        <div class="d-flex justify-content-center gap-2">
+          <a
+            href="{{ url_for('users.edit_user', user_id=u.id) }}"
+            class="btn btn-sm btn-warning"
+            >✏️ Edit</a
+          >
+          <button
+            class="btn btn-sm btn-danger"
+            data-bs-toggle="modal"
+            data-bs-target="#confirmDeleteModal"
+            data-user-id="{{ u.id }}"
+            data-user-name="{{ u.firstName }}"
+          >
+            🗑 Delete
+          </button>
+        </div>
+      </td>
+    </tr>
+    {% else %}
+    <tr>
+      <td colspan="6" class="text-center text-muted">No users found</td>
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>
+
+<!-- Delete Confirmation Modal -->
+<div
+  class="modal fade"
+  id="confirmDeleteModal"
+  tabindex="-1"
+  aria-hidden="true"
+>
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header bg-danger text-white">
+        <h5 class="modal-title">⚠️ Confirm Delete</h5>
+        <button
+          type="button"
+          class="btn-close btn-close-white"
+          data-bs-dismiss="modal"
+          aria-label="Close"
+        ></button>
+      </div>
+      <div class="modal-body text-center">
+        <div class="delete-warning-icon mb-3">🗑</div>
+        <p id="deleteMessage" class="fw-bold fs-5">
+          Are you sure you want to delete this user?
+        </p>
+      </div>
+      <div class="modal-footer justify-content-center">
+        <button
+          type="button"
+          class="btn btn-secondary px-4"
+          data-bs-dismiss="modal"
+        >
+          Cancel
+        </button>
+        <a id="confirmDeleteBtn" href="#" class="btn btn-danger px-4"
+          >Yes, Delete</a
+        >
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}
