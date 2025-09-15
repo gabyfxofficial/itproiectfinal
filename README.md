@@ -23,7 +23,7 @@ A Flask + SQLite web application for managing users, with full CRUD functionalit
 ## Clone repo:
 
 ```bash
-git clone https://github.com/YOUR_USERNAME/final-project.git
+git clone https://github.com/gabyfxofficial/itproiectfinal
 cd final-project
 ```
 
