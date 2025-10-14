@@ -1,12 +1,15 @@
-from flask import Blueprint, render_template, request, redirect, url_for
+from flask import Blueprint, render_template, request, redirect, url_for, session, flash
 from services import crud_service, filter_service
 from database.models import create_table
 
-# Blueprint pentru utilizatori
 users_bp = Blueprint("users", __name__, template_folder="../templates/users")
-
-# Creează tabelul dacă nu există
 create_table()
+
+def admin_required():
+    if "admin" not in session:
+        flash("You must be logged in as admin to perform this action.", "danger")
+        return False
+    return True
 
 @users_bp.route("/")
 def list_users():
@@ -24,40 +27,73 @@ def list_users():
 
     return render_template("users/list.html", users=users)
 
+@users_bp.route("/details/<int:user_id>")
+def user_details(user_id):
+    user = crud_service.get_user(user_id)
+    if not user:
+        flash("User not found.", "warning")
+        return redirect(url_for("users.list_users"))
+    return render_template("users/details.html", user=user)
+
 @users_bp.route("/add", methods=["GET", "POST"])
 def add_user():
+    if not admin_required():
+        return redirect(url_for("auth.login"))
     if request.method == "POST":
         crud_service.add_user(
-            request.form["firstName"],
-            request.form["lastName"],
-            int(request.form["age"]),
-            request.form["email"],
-            request.form["company"]
+            firstName=request.form.get("firstName", "").strip(),
+            lastName=request.form.get("lastName", "").strip(),
+            age=int(request.form.get("age") or 0),
+            email=request.form.get("email", "").strip(),
+            company=request.form.get("company", "").strip(),
+            phone=request.form.get("phone", "").strip(),
+            iban=request.form.get("iban", "").strip(),
+            country=request.form.get("country", "").strip(),
+            address_street=request.form.get("address_street", "").strip(),
+            address_city=request.form.get("address_city", "").strip(),
+            address_state=request.form.get("address_state", "").strip(),
+            address_postal=request.form.get("address_postal", "").strip(),
+            role=request.form.get("role", "").strip()
         )
+        flash("User added successfully!", "success")
         return redirect(url_for("users.list_users"))
     return render_template("users/add.html")
 
 @users_bp.route("/edit/<int:user_id>", methods=["GET", "POST"])
 def edit_user(user_id):
+    if not admin_required():
+        return redirect(url_for("auth.login"))
     user = crud_service.get_user(user_id)
+    if not user:
+        flash("User not found.", "warning")
+        return redirect(url_for("users.list_users"))
+
     if request.method == "POST":
         crud_service.update_user(
-            user_id,
-            request.form["firstName"],
-            request.form["lastName"],
-            int(request.form["age"]),
-            request.form["email"],
-            request.form["company"]
+            user_id=user_id,
+            firstName=request.form.get("firstName", "").strip(),
+            lastName=request.form.get("lastName", "").strip(),
+            age=int(request.form.get("age") or 0),
+            email=request.form.get("email", "").strip(),
+            company=request.form.get("company", "").strip(),
+            phone=request.form.get("phone", "").strip(),
+            iban=request.form.get("iban", "").strip(),
+            country=request.form.get("country", "").strip(),
+            address_street=request.form.get("address_street", "").strip(),
+            address_city=request.form.get("address_city", "").strip(),
+            address_state=request.form.get("address_state", "").strip(),
+            address_postal=request.form.get("address_postal", "").strip(),
+            role=request.form.get("role", "").strip()
         )
-        return redirect(url_for("users.list_users"))
+        flash("User updated successfully!", "success")
+        return redirect(url_for("users.user_details", user_id=user_id))
+
     return render_template("users/edit.html", user=user)
 
 @users_bp.route("/delete/<int:user_id>")
 def delete_user(user_id):
+    if not admin_required():
+        return redirect(url_for("auth.login"))
     crud_service.delete_user(user_id)
+    flash("User deleted successfully!", "info")
     return redirect(url_for("users.list_users"))
-
-@users_bp.route("/details/<int:user_id>")
-def user_details(user_id):
-    user = crud_service.get_user(user_id)
-    return render_template("users/details.html", user=user)

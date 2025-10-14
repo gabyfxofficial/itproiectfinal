@@ -8,7 +8,7 @@ def setup_db():
     create_table()
     conn = get_connection()
     cur = conn.cursor()
-    cur.execute("DELETE FROM users")  # curățăm DB
+    cur.execute("DELETE FROM users") 
     conn.commit()
     conn.close()
 

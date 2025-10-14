@@ -1,54 +1,66 @@
-{% extends "layouts/base.html" %} {% block title %}User Details{% endblock %} {%
-block content %}
+{% extends "layouts/base.html" %}
+{% block title %}User Details{% endblock %}
+
+{% block content %}
 <h2 class="mb-3">User Details</h2>
 
 <div class="card shadow-sm text-center">
   <div class="card-body">
     <h4 class="card-title">{{ user.firstName }} {{ user.lastName }}</h4>
+
     <p class="card-text">
-      <strong>Age:</strong> {{ user.age }} <br />
-      <strong>Email:</strong> {{ user.email }} <br />
-      <strong>Company:</strong> {{ user.company }}
+      <strong>Age:</strong> <span class="badge-age">{{ user.age }}</span>
+      &nbsp; <strong>Role:</strong>
+      {% if user.role == 'admin' %}
+        <span class="badge bg-danger text-white px-3 py-2">{{ user.role|capitalize }}</span>
+      {% elif user.role == 'moderator' %}
+        <span class="badge bg-warning text-dark px-3 py-2">{{ user.role|capitalize }}</span>
+      {% else %}
+        <span class="badge bg-secondary text-white px-3 py-2">{{ user.role|capitalize or 'User' }}</span>
+      {% endif %}
     </p>
+
+    <p class="card-text mt-3">
+      <strong>Email:</strong> {{ user.email }} <br>
+      <strong>Phone:</strong> {{ user.phone or '-' }} <br>
+      <strong>IBAN:</strong> {{ user.iban or '-' }} <br>
+      <strong>Company:</strong> {{ user.company or '-' }} <br>
+      <strong>Country:</strong> {{ user.country or '-' }}
+    </p>
+
+    <div class="mb-3">
+      <strong>Address:</strong><br>
+      {{ user.address_street or '-' }}<br>
+      {{ user.address_city or '' }} {{ user.address_state or '' }}<br>
+      ZIP: {{ user.address_postal or '-' }}
+    </div>
+
     <div class="d-flex justify-content-center gap-2">
-      <a
-        href="{{ url_for('users.edit_user', user_id=user.id) }}"
-        class="btn btn-warning"
-        >✏️ Edit</a
-      >
-      <button
-        class="btn btn-danger"
-        data-bs-toggle="modal"
-        data-bs-target="#confirmDeleteModal"
-        data-user-id="{{ user.id }}"
-        data-user-name="{{ user.firstName }}"
-      >
-        🗑 Delete
-      </button>
-      <a href="{{ url_for('users.list_users') }}" class="btn btn-secondary"
-        >⬅️ Back</a
-      >
+      {% if session.admin %}
+        <a href="{{ url_for('users.edit_user', user_id=user.id) }}" class="btn btn-warning">✏️ Edit</a>
+        <button class="btn btn-danger"
+                data-bs-toggle="modal"
+                data-bs-target="#confirmDeleteModal"
+                data-user-id="{{ user.id }}"
+                data-user-name="{{ user.firstName }}">
+          🗑 Delete
+        </button>
+      {% else %}
+        <button class="btn btn-secondary" disabled>Edit</button>
+        <button class="btn btn-secondary" disabled>Delete</button>
+      {% endif %}
+      <a href="{{ url_for('users.list_users') }}" class="btn btn-secondary">⬅️ Back</a>
     </div>
   </div>
 </div>
 
 <!-- Delete Confirmation Modal -->
-<div
-  class="modal fade"
-  id="confirmDeleteModal"
-  tabindex="-1"
-  aria-hidden="true"
->
+<div class="modal fade" id="confirmDeleteModal" tabindex="-1" aria-hidden="true">
   <div class="modal-dialog modal-dialog-centered">
     <div class="modal-content">
       <div class="modal-header bg-danger text-white">
         <h5 class="modal-title">⚠️ Confirm Delete</h5>
-        <button
-          type="button"
-          class="btn-close btn-close-white"
-          data-bs-dismiss="modal"
-          aria-label="Close"
-        ></button>
+        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
       <div class="modal-body text-center">
         <div class="delete-warning-icon mb-3">🗑</div>
@@ -57,16 +69,8 @@ block content %}
         </p>
       </div>
       <div class="modal-footer justify-content-center">
-        <button
-          type="button"
-          class="btn btn-secondary px-4"
-          data-bs-dismiss="modal"
-        >
-          Cancel
-        </button>
-        <a id="confirmDeleteBtn" href="#" class="btn btn-danger px-4"
-          >Yes, Delete</a
-        >
+        <button type="button" class="btn btn-secondary px-4" data-bs-dismiss="modal">Cancel</button>
+        <a id="confirmDeleteBtn" href="#" class="btn btn-danger px-4">Yes, Delete</a>
       </div>
     </div>
   </div>
