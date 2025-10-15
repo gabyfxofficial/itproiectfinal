@@ -1,13 +1,14 @@
 from database import get_connection
 from typing import List, Dict, Any, Optional
 
+# Add a new user to the database
 def add_user(firstName: str, lastName: str, age: int, email: str, company: str,
              phone: str = "", iban: str = "", country: str = "",
              address_street: str = "", address_city: str = "",
              address_state: str = "", address_postal: str = "",
              role: str = "") -> None:
-    conn = get_connection()
-    cur = conn.cursor()
+    conn = get_connection()  # Connect to the database
+    cur = conn.cursor()      # Create a cursor for executing SQL commands
     cur.execute("""
         INSERT INTO users (
             firstName, lastName, age, email, company,
@@ -17,25 +18,28 @@ def add_user(firstName: str, lastName: str, age: int, email: str, company: str,
     """, (firstName, lastName, age, email, company,
           phone, iban, country, address_street, address_city,
           address_state, address_postal, role))
-    conn.commit()
-    conn.close()
+    conn.commit()            # Save the changes
+    conn.close()             # Close the connection
 
+# Retrieve all users from the database
 def get_all_users() -> List[Dict[str, Any]]:
     conn = get_connection()
     cur = conn.cursor()
     cur.execute("SELECT * FROM users")
-    rows = cur.fetchall()
+    rows = cur.fetchall()    # Fetch all rows from the query
     conn.close()
     return rows
 
+# Retrieve a single user by ID
 def get_user(user_id: int) -> Optional[Dict[str, Any]]:
     conn = get_connection()
     cur = conn.cursor()
     cur.execute("SELECT * FROM users WHERE id=?", (user_id,))
-    row = cur.fetchone()
+    row = cur.fetchone()     # Fetch one record
     conn.close()
     return row
 
+# Update user details based on user ID
 def update_user(user_id: int, firstName: str, lastName: str, age: int, email: str, company: str,
                 phone: str = "", iban: str = "", country: str = "",
                 address_street: str = "", address_city: str = "",
@@ -55,6 +59,7 @@ def update_user(user_id: int, firstName: str, lastName: str, age: int, email: st
     conn.commit()
     conn.close()
 
+# Delete a user from the database
 def delete_user(user_id: int) -> None:
     conn = get_connection()
     cur = conn.cursor()

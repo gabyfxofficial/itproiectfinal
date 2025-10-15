@@ -3,8 +3,9 @@ from reportlab.lib.pagesizes import A4
 from reportlab.pdfgen import canvas
 import io
 
+# Generate summarized report data grouped by company
 def generate_report():
-    conn = get_connection()
+    conn = get_connection()   # Connect to the database
     cur = conn.cursor()
     cur.execute("""
         SELECT company AS company,
@@ -13,20 +14,21 @@ def generate_report():
         FROM users
         GROUP BY company
     """)
-    data = cur.fetchall()
-    conn.close()
+    data = cur.fetchall()     # Fetch the grouped results
+    conn.close()              # Close the database connection
     return data
 
+# Generate a PDF version of the company report
 def generate_report_pdf():
-    buffer = io.BytesIO()
-    p = canvas.Canvas(buffer, pagesize=A4)
-    width, height = A4
+    buffer = io.BytesIO()                     # Create an in-memory buffer for PDF data
+    p = canvas.Canvas(buffer, pagesize=A4)    # Create a PDF canvas
+    width, height = A4                        # Get A4 page dimensions
 
-    # Titlu
+    # Title
     p.setFont("Helvetica-Bold", 16)
     p.drawString(200, height - 50, "Company Report")
 
-    # Header tabel
+    # Table header
     p.setFont("Helvetica-Bold", 12)
     y = height - 100
     p.drawString(50, y, "Company")
@@ -34,17 +36,18 @@ def generate_report_pdf():
     p.drawString(400, y, "Average Age")
     y -= 20
 
-    # Date
+    # Table data
     p.setFont("Helvetica", 11)
     for row in generate_report():
-        p.drawString(50, y, str(row["company"]))
-        p.drawString(250, y, str(row["user_count"]))
-        p.drawString(400, y, f"{row['avg_age']:.1f}")
+        p.drawString(50, y, str(row["company"]))        # Company name
+        p.drawString(250, y, str(row["user_count"]))    # Number of users
+        p.drawString(400, y, f"{row['avg_age']:.1f}")   # Average age (1 decimal)
         y -= 20
-        if y < 50:  # pagină nouă dacă nu mai încape
+        # Create a new page if there's not enough space left
+        if y < 50:
             p.showPage()
             y = height - 50
 
-    p.save()
-    buffer.seek(0)
-    return buffer
+    p.save()                    # Finalize the PDF
+    buffer.seek(0)              # Move the buffer cursor to the start
+    return buffer               # Return the generated PDF buffer
